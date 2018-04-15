@@ -1,0 +1,43 @@
+from tkinter import *
+import tkinter.font
+from gpiozero import LED
+import RPi.GPIO
+RPi.GPIO.setmode(RPi.GPIO.BCM)
+
+ledRed=LED(14)
+ledGreen=LED(15)
+ledBlue=LED(18)
+
+ledArray = [ledRed, ledGreen, ledBlue]
+
+win = Tk()
+win.title('LED Toggler')
+myfont = tkinter.font.Font(family = 'Helvetica', size = 12, weight = 'bold')
+
+def ledToggle():
+    for val in ledArray:
+        if val.is_lit:
+            val.off()           
+        else:
+            val.on()
+            
+def close():
+    RPi.GPIO.cleanup()
+    win.destroy()
+
+ledButtonRed = Button(win, text='Red LED', font=myfont, command=ledToggle, bg='bisque2',height=1, width=24)
+ledButtonRed.grid(row=0,column=1)
+
+ledButtonGreen = Button(win, text='Green LED', font=myfont, command=ledToggle, bg='bisque2',height=1, width=24)
+ledButtonGreen.grid(row=2,column=1)
+
+ledButtonBlue = Button(win, text='Blue LED', font=myfont, command=ledToggle, bg='bisque2',height=1, width=24)
+ledButtonBlue.grid(row=4,column=1)
+
+exitButton = Button(win, text = 'Exit', font=myfont, command=close, bg='red', height=1, width=6)
+exitButton.grid(row=6, column=1)
+
+win.protocol('WM_DELETE_WINDOW', close)
+
+win.mainloop()
+
